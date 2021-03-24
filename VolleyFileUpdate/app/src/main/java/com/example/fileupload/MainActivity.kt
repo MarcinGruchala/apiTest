@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var imageButton: Button
     private lateinit var sendButton: Button
     private var imageData: ByteArray? = null
-    private val postURL: String = "https://chessboard-importer.herokuapp.com/photo" // remember to use your own api
+    private val postURL: String = "https://chessboard-importer.herokuapp.com/photo"
 
     companion object {
         private const val IMAGE_PICK_CODE = 999

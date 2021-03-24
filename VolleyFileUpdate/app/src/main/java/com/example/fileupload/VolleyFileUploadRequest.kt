@@ -17,7 +17,7 @@ open class VolleyFileUploadRequest(
 
     private var headers: Map<String, String>? = null
     private val divider: String = "--"
-    private val ending = "\r\n"
+    private val ending = "\r\n"        //\n
     private val boundary = "imageRequest${System.currentTimeMillis()}"
 
 
@@ -27,7 +27,7 @@ open class VolleyFileUploadRequest(
             else -> headers!!.toMutableMap()
         }
 
-    override fun getBodyContentType() = "multipart/form-data"//;boundary=$boundary
+    override fun getBodyContentType() = "multipart/form-data;boundary=$boundary"
 
 
     @Throws(AuthFailureError::class)

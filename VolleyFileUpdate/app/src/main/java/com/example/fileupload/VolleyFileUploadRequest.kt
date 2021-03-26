@@ -3,6 +3,7 @@ package com.example.fileupload
 import com.android.volley.*
 import com.android.volley.toolbox.HttpHeaderParser
 import java.io.*
+import java.nio.charset.Charset
 import kotlin.math.min
 
 open class VolleyFileUploadRequest(
@@ -56,11 +57,21 @@ open class VolleyFileUploadRequest(
         return null
     }
 
-    override fun parseNetworkResponse(response: NetworkResponse): Response<NetworkResponse> {
+//    override fun parseNetworkResponse(response: NetworkResponse): Response<NetworkResponse> {
+//        return try {
+//            Response.success(response, HttpHeaderParser.parseCacheHeaders(response))
+//        } catch (e: Exception) {
+//            Response.error(ParseError(e))
+//        }
+//    }
+    override fun parseNetworkResponse(response: NetworkResponse?): Response<T> {
         return try {
-            Response.success(response, HttpHeaderParser.parseCacheHeaders(response))
-        } catch (e: Exception) {
-            Response.error(ParseError(e))
+            val json = String(
+                    response?.data ?: ByteArray(0),
+                    Charset.forName(HttpHeaderParser.parseCharset(response?.headers)))
+            Response.success(
+                    gson.fromJson(json, clazz),
+                    HttpHeaderParser.parseCacheHeaders(response))
         }
     }
 
@@ -111,6 +122,8 @@ open class VolleyFileUploadRequest(
             dataOutputStream.writeBytes(ending)
         }
     }
+
+
 }
 
 class FileDataPart(var fileName: String?, var data: ByteArray, var type: String)

@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.Volley
@@ -52,7 +53,7 @@ class MainActivity : AppCompatActivity() {
                 Request.Method.POST,
                 postURL,
                 Response.Listener {
-                    Log.d("Response","response is: $it")
+                Log.d("Response","response is: ${it.toString()}")
                 },
                 Response.ErrorListener {
                     Log.d("Response","ERROR ")
@@ -60,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         ) {
             override fun getByteData(): MutableMap<String, FileDataPart> {
                 var params = HashMap<String, FileDataPart>()
-                params["imageFile"] = FileDataPart("image", imageData!!, "jpeg")
+                params["file"] = FileDataPart("image", imageData!!, "jpeg")
                 return params
             }
         }

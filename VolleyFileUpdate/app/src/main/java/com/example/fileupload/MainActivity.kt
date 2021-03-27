@@ -9,6 +9,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import com.android.volley.NetworkResponse
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.Volley
@@ -49,11 +50,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun uploadImage() {
         imageData?: return
+
         val request = object : VolleyFileUploadRequest(
                 Request.Method.POST,
                 postURL,
                 Response.Listener {
-                Log.d("Response","response is: ${it.toString()}")
+                Log.d("Response","response is: ${String(it.data)}")
                 },
                 Response.ErrorListener {
                     Log.d("Response","ERROR ")

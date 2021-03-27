@@ -2,6 +2,7 @@ package com.example.fileupload
 
 import com.android.volley.*
 import com.android.volley.toolbox.HttpHeaderParser
+import com.google.gson.Gson
 import java.io.*
 import java.nio.charset.Charset
 import kotlin.math.min
@@ -15,12 +16,10 @@ open class VolleyFileUploadRequest(
     init {
         this.responseListener = listener
     }
-
     private var headers: Map<String, String>? = null
     private val divider: String = "--"
-    private val ending = "\r\n"        //\n
+    private val ending = "\r\n"
     private val boundary = "imageRequest${System.currentTimeMillis()}"
-
 
     override fun getHeaders(): MutableMap<String, String> =
         when(headers) {
@@ -29,7 +28,6 @@ open class VolleyFileUploadRequest(
         }
 
     override fun getBodyContentType() = "multipart/form-data;boundary=$boundary"
-
 
     @Throws(AuthFailureError::class)
     override fun getBody(): ByteArray {
@@ -57,21 +55,11 @@ open class VolleyFileUploadRequest(
         return null
     }
 
-//    override fun parseNetworkResponse(response: NetworkResponse): Response<NetworkResponse> {
-//        return try {
-//            Response.success(response, HttpHeaderParser.parseCacheHeaders(response))
-//        } catch (e: Exception) {
-//            Response.error(ParseError(e))
-//        }
-//    }
-    override fun parseNetworkResponse(response: NetworkResponse?): Response<T> {
+    override fun parseNetworkResponse(response: NetworkResponse): Response<NetworkResponse> {
         return try {
-            val json = String(
-                    response?.data ?: ByteArray(0),
-                    Charset.forName(HttpHeaderParser.parseCharset(response?.headers)))
-            Response.success(
-                    gson.fromJson(json, clazz),
-                    HttpHeaderParser.parseCacheHeaders(response))
+            Response.success(response, HttpHeaderParser.parseCacheHeaders(response))
+        } catch (e: Exception) {
+            Response.error(ParseError(e))
         }
     }
 
